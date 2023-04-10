@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  db:
+    image: "postgres:15.2-alpine"
+    restart: always
+    container_name: "microsvc-demo-pgsql-container"
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=microsvc-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  microservice:
+    image: 'microsvc-demo:latest'
+    build: ./micro-service
+    container_name: 'microsvc-demo-container'
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/microsvc-db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  frontend:
+    image: 'microsvc-user-demo:latest'
+    build: ./micro-service-user
+    container_name: 'microsvc-user-demo-container'
+    ports:
+      - 8088:8088
+    depends_on:
+      - microservice
+
+
+volumes:
+  db:
+    driver: local
