@@ -1,6 +1,7 @@
 # Micro service demo
 This repository holds a small demonstration project that shows how a micro service can be built and used by another web application.
-Both the micro service and the web application using it are written in Java using Spring Boot. Maven is used as build tool.
+Both the micro service and the web application using it are written in **Java using Spring Boot**. **Maven** is used as build tool,
+and **docker compose** is used to build and run the combined application. 
 
 The micro service uses PostgreSQL to store and fetch some dummy data.
 
